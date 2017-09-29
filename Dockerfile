@@ -26,7 +26,7 @@ RUN php -m
 
 # Install NVM
 ENV NVM_DIR /usr/local/nvm
-ENV NODE_VERSION 8.1.4
+ENV NODE_VERSION 6.11.3
 RUN curl --silent -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.2/install.sh | bash
 
 # install node and npm
