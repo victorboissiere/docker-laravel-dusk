@@ -11,7 +11,7 @@ RUN apt-get update -yqq && apt-get install -y git wget curl libcurl4-gnutls-dev 
 
 # Increase PHP memory allocation
 RUN touch /usr/local/etc/php/conf.d/uploads.ini \
-    && echo "upload_max_filesize = 200M;" >> /usr/local/etc/php/conf.d/uploads.ini
+    && echo "memory_limit = 500M;" >> /usr/local/etc/php/conf.d/uploads.ini
 
 # Add chrome repo and install google-chrome-stable
 RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
