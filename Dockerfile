@@ -9,6 +9,10 @@ RUN apt-get update -yqq && apt-get install -y git wget curl libcurl4-gnutls-dev 
       libgmp3-dev libldap2-dev unixodbc-dev libpq-dev libsqlite3-dev libaspell-dev \
       libsnmp-dev libpcre3-dev libtidy-dev -yqq bzip2 libfontconfig xvfb chromium libmagickwand-dev apt-transport-https ca-certificates
 
+# Increase PHP memory allocation
+RUN touch /usr/local/etc/php/conf.d/uploads.ini \
+    && echo "upload_max_filesize = 200M;" >> /usr/local/etc/php/conf.d/uploads.ini
+
 # Add chrome repo and install google-chrome-stable
 RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
 RUN sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
