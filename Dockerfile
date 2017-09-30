@@ -13,16 +13,14 @@ RUN apt-get update -yqq && apt-get install -y git wget curl libcurl4-gnutls-dev 
 RUN touch /usr/local/etc/php/conf.d/uploads.ini \
     && echo "memory_limit = 500M;" >> /usr/local/etc/php/conf.d/uploads.ini
 
-# Add chrome repo and install google-chrome-stable
-RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
-RUN sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
-RUN apt-get update
-RUN apt-get install -y google-chrome-stable
+# Special package for Laravel Dusk
+RUN apt-get -y install libxpm4 libxrender1 libgtk2.0-0 libnss3 libgconf-2-4 chromium-browser xvfb gtk2-engines-pixbuf \
+    xfonts-cyrillic xfonts-100dpi xfonts-75dpi xfonts-base xfonts-scalable imagemagick x11-apps
 
 # Install php environment
 RUN docker-php-ext-install mbstring mcrypt pdo_mysql curl json intl gd xml zip bz2 opcache bcmath
 
-# Install imagick
+# Install imagick (screen capture)
 RUN pecl install imagick && docker-php-ext-enable imagick
 
 # check installed modules
