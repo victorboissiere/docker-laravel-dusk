@@ -10,7 +10,7 @@ RUN apt-get update -yqq && apt-get install -y git wget curl chromium-browser php
 RUN google-chrome &
 
 # Install php environment
-RUN apt-get install -y php-mbstring php-mcrypt php-mysql php-curl php-zip
+RUN apt-get install -y php-mbstring php-mcrypt php-mysql php-curl php-zip php-xml
 
 # check installed modules
 RUN php -m
