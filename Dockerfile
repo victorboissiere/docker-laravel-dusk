@@ -1,37 +1,22 @@
-FROM php:7.0
+FROM ubuntu:16.04
 
 # Replace shell with bash so we can source files
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 
 # Install packages
-RUN apt-get update -yqq && apt-get install -y git wget curl libcurl4-gnutls-dev libicu-dev libmcrypt-dev libvpx-dev libjpeg-dev libpng-dev  \
-      libxpm-dev zlib1g-dev libfreetype6-dev libxml2-dev libexpat1-dev libbz2-dev \
-      libgmp3-dev libldap2-dev unixodbc-dev libpq-dev libsqlite3-dev libaspell-dev \
-      libsnmp-dev libpcre3-dev libtidy-dev -yqq bzip2 libfontconfig xvfb chromium libmagickwand-dev apt-transport-https ca-certificates
+RUN apt-get update -yqq && apt-get install -y git wget curl chromium-browser php
 
-# Increase PHP memory allocation
-RUN touch /usr/local/etc/php/conf.d/uploads.ini \
-    && echo "memory_limit = 500M;" >> /usr/local/etc/php/conf.d/uploads.ini
-
-# Special package for Laravel Dusk
-RUN apt-get -y install libxpm4 libxrender1 libgtk2.0-0 libnss3 libgconf-2-4 xvfb gtk2-engines-pixbuf \
-    xfonts-cyrillic xfonts-100dpi xfonts-75dpi xfonts-base xfonts-scalable imagemagick x11-apps
-RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
-RUN sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
-RUN apt-get update
-RUN apt-get install -y google-chrome-stable
-RUN Xvfb :0 -screen 0 1280x960x24 &
+# Laravel Dusk
+RUN google-chrome &
 
 # Install php environment
-RUN docker-php-ext-install mbstring mcrypt pdo_mysql curl json intl gd xml zip bz2 opcache bcmath
-
-# Install imagick (screen capture)
-RUN pecl install imagick && docker-php-ext-enable imagick
+RUN apt-get install -y php-mbstring php-mcrypt php-mysql php-curl php-zip
 
 # check installed modules
 RUN php -m
 
 # Install NVM
+RUN apt-get install -y apt-transport-https
 ENV NVM_DIR /usr/local/nvm
 ENV NODE_VERSION 6.11.3
 RUN curl --silent -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.2/install.sh | bash
@@ -45,7 +30,7 @@ RUN source $NVM_DIR/nvm.sh \
 # Install yarn
 RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
     && echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list \
-    && apt-get update && apt-get install yarn
+    && apt-get update && apt-get install -y yarn
 
 # add node and npm to path so the commands are available
 ENV NODE_PATH $NVM_DIR/v$NODE_VERSION/lib/node_modules
@@ -61,6 +46,6 @@ RUN node -v
 RUN npm -v
 RUN php -v
 RUN yarn -v
-RUN google-chrome-stable --version
+RUN chromium-browser --version
 RUN composer --version
 RUN php -m
