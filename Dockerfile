@@ -11,17 +11,9 @@ RUN google-chrome &
 # check installed modules
 RUN php -m
 
-# Install NVM
-RUN apt-get install -y apt-transport-https
-ENV NVM_DIR /usr/local/nvm
-ENV NODE_VERSION 6.11.3
-RUN curl --silent -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.2/install.sh | bash
-
 # install node and npm
-RUN source $NVM_DIR/nvm.sh \
-    && nvm install $NODE_VERSION \
-    && nvm alias default $NODE_VERSION \
-    && nvm use default
+RUN curl -sL https://deb.nodesource.com/setup_6.x | bash - && apt-get install -y nodejs && \
+    nodejs --version
 
 # Install yarn
 RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
