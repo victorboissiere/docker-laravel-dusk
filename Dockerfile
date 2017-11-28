@@ -1,16 +1,12 @@
-FROM ubuntu:16.04
+FROM phpdockerio/php71-fpm:latest
 
-# Replace shell with bash so we can source files
-RUN rm /bin/sh && ln -s /bin/bash /bin/sh
-
-# Install packages
-RUN apt-get update -yqq && apt-get install -y git wget curl chromium-browser php
+RUN apt-get update \
+      && apt-get -y --no-install-recommends install php7.1-memcached php7.1-mysql php7.1-imagick php7.1-mbstring php7.1-gd php7.1-zip php7.1-xml php7.1-mcrypt \
+      && apt-get install -y git wget curl chromium-browser \
+      && apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
 
 # Laravel Dusk
 RUN google-chrome &
-
-# Install php environment
-RUN apt-get install -y php-mbstring php-mcrypt php-mysql php-curl php-zip php-xml
 
 # check installed modules
 RUN php -m
