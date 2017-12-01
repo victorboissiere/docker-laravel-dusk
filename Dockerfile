@@ -1,7 +1,7 @@
 FROM phpdockerio/php71-fpm:latest
 
 RUN apt-get update \
-      && apt-get -y --no-install-recommends install php7.1-memcached php7.1-mysql php7.1-imagick php7.1-mbstring php7.1-gd php7.1-zip php7.1-xml php7.1-mcrypt \
+      && apt-get -y --no-install-recommends install php7.1-memcached php7.1-mysql php7.1-imagick php7.1-mbstring php7.1-gd php7.1-zip php7.1-xml php7.1-mcrypt php7.1-bcmath \
       && apt-get install -y git wget curl chromium-browser \
       && apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
 
